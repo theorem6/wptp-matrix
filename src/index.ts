@@ -7,3 +7,9 @@ export {
   type VerificationGrade,
 } from "./types.js";
 export { assertCompatibilityMatrix, MatrixValidationError } from "./validate.js";
+export { composeOpenApiIrNextJs, type ComposeResult } from "./compose.js";
+export {
+  verifyComposedNextJsBronze,
+  type ContractCheck,
+  type ContractVerifyResult,
+} from "./verify-contract.js";

@@ -5,10 +5,24 @@
   "type": "module",
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/theorem6/wptp-matrix.git" },
+  "bin": {
+    "wptp-compose": "./dist/compose-cli.js"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "compose": "tsx src/compose-cli.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "validate": "tsx src/cli-validate.ts"
+  },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./compose": { "types": "./dist/compose.d.ts", "import": "./dist/compose.js" }
+  },
+  "dependencies": {
+    "@wptp/ir": "github:theorem6/wptp-ir#v0.1.0",
+    "@wptp/adapter-openapi": "github:theorem6/wptp-adapter-openapi#v0.1.0",
+    "@wptp/emit-nextjs": "github:theorem6/wptp-emit-nextjs#v0.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",
