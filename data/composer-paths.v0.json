@@ -25,6 +25,17 @@
       "matrixEdges": ["browser-trace-to-wptp-ir", "wptp-ir-to-nextjs-handlers", "browser-to-nextjs-composed"]
     },
     {
+      "id": "openapi-ir-hono",
+      "description": "OpenAPI contract to Hono TypeScript via IR and WebIR export",
+      "grade": "bronze",
+      "steps": [
+        { "repo": "theorem6/wptp-adapter-openapi", "action": "importOpenApiJson" },
+        { "repo": "theorem6/wptp-ir", "action": "exportIrToWebIrBundleV0" },
+        { "repo": "theorem6/chrysalis", "action": "emit-webir-bundle-hono" }
+      ],
+      "matrixEdges": ["openapi-to-wptp-ir", "ir-v0-to-webir-bundle", "openapi-to-hono-ts"]
+    },
+    {
       "id": "php-webir-hono",
       "description": "Legacy PHP to Hono TypeScript (Chrysalis monolith path)",
       "grade": "gold",

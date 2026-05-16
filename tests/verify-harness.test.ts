@@ -16,9 +16,10 @@ describe("matrix verify harness", () => {
     const outDir = mkdtempSync(join(tmpdir(), "wptp-harness-"));
     tempDirs.push(outDir);
     const results = runMatrixHarness({ fixtureRoot, outDir });
-    expect(results.map((r) => r.id).sort()).toEqual(
-      ["har-ir-nextjs", "openapi-ir-nextjs", "webir-neutral-ir"].sort(),
-    );
+    const ids = results.map((r) => r.id).sort();
+    expect(ids).toContain("har-ir-nextjs");
+    expect(ids).toContain("openapi-ir-nextjs");
+    expect(ids).toContain("webir-neutral-ir");
     const summary = harnessSummary(results);
     expect(summary.ok).toBe(true);
     expect(summary.failed).toEqual([]);

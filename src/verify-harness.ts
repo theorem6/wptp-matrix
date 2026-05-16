@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { assertIrDocumentV0, importWebIrBundleJson, summarizeLosses } from "@wptp/ir";
 import type { ComposeResult } from "./compose.js";
 import { composeHarIrNextJs, composeOpenApiIrNextJs } from "./compose.js";
+import { composeOpenApiIrHono } from "./compose-openapi-hono.js";
+import { verifyComposedHonoBronze } from "./verify-hono-bronze.js";
 import { verifyComposedNextJsBronze, type ContractVerifyResult } from "./verify-contract.js";
 
 export type HarnessGrade = "bronze" | "silver" | "gold";
@@ -38,6 +40,7 @@ export const HARNESS_CASES: ReadonlyArray<HarnessCase> = [
   { id: "openapi-ir-nextjs", grade: "bronze", description: "OpenAPI → IR → Next.js contract stubs" },
   { id: "har-ir-nextjs", grade: "bronze", description: "HAR → IR → Next.js contract stubs" },
   { id: "webir-neutral-ir", grade: "silver", description: "Chrysalis WebIR bundle → IR v0 (loss report)" },
+  { id: "openapi-ir-hono", grade: "bronze", description: "OpenAPI → IR → WebIR → Chrysalis emit-hono stubs" },
   { id: "php-webir-hono", grade: "gold", description: "Chrysalis ingest + emit-hono + verify (monolith CI)" },
 ];
 
@@ -102,6 +105,21 @@ export function runMatrixHarness(options: {
   );
 
   results.push(runSilverWebIrImport(join(root, "minimal-route.webir.bundle.json")));
+
+  const chrysalisRoot = process.env.CHRYSALIS_ROOT;
+  if (chrysalisRoot) {
+    const honoOut = join(options.outDir, "openapi-hono");
+    const hono = composeOpenApiIrHono(join(root, "petstore-mini.openapi.json"), honoOut, {
+      chrysalisRoot,
+    });
+    const honoVerify = verifyComposedHonoBronze(honoOut, hono, ["listPets", "createPet", "getPet"]);
+    results.push({
+      id: "openapi-ir-hono",
+      grade: "bronze",
+      ok: hono.emitOk && honoVerify.ok,
+      detail: `emit=${hono.emitOk} handlers=${hono.handlerCount}`,
+    });
+  }
 
   return results;
 }

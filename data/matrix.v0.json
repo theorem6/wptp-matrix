@@ -119,9 +119,13 @@
         "repo": "theorem6/chrysalis"
       },
       "grade": "bronze",
-      "status": "planned",
+      "status": "supported",
+      "irHub": "theorem6/wptp-ir",
       "evidence": {
-        "notes": "Requires IR→WebIR or direct emit bridge; not yet implemented."
+        "corpus": "fixtures/petstore-mini.openapi.json",
+        "ci": "wptp-matrix verify:harness with CHRYSALIS_ROOT; chrysalis emit-hono bundle test",
+        "harness": "openapi-ir-hono compose + bronze handler stubs",
+        "notes": "Stub handlers only; not Gold replay."
       }
     },
     {

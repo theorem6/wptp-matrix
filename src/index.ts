@@ -8,6 +8,8 @@ export {
 } from "./types.js";
 export { assertCompatibilityMatrix, MatrixValidationError } from "./validate.js";
 export { composeHarIrNextJs, composeOpenApiIrNextJs, type ComposeResult } from "./compose.js";
+export { composeOpenApiIrHono, type ComposeHonoResult } from "./compose-openapi-hono.js";
+export { verifyComposedHonoBronze } from "./verify-hono-bronze.js";
 export {
   verifyComposedNextJsBronze,
   type ContractCheck,
