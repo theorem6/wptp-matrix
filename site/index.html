@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>WPTP compatibility matrix</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 960px; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+      .gold { background: #e8f5e9; }
+      .silver { background: #fff8e1; }
+      .bronze { background: #fbe9e7; }
+    </style>
+  </head>
+  <body>
+    <h1>Web Platform Translation Program</h1>
+    <p>Read-only view of <code>data/matrix.v0.json</code>. Gold rows require harness + corpus or CI in the JSON.</p>
+    <table id="matrix">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Target</th>
+          <th>Grade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script>
+      fetch("../data/matrix.v0.json")
+        .then((r) => r.json())
+        .then((m) => {
+          const tbody = document.querySelector("#matrix tbody");
+          for (const e of m.edges) {
+            const tr = document.createElement("tr");
+            tr.className = e.grade;
+            tr.innerHTML =
+              "<td>" +
+              e.source.family +
+              "</td><td>" +
+              e.target.family +
+              "</td><td>" +
+              e.grade +
+              "</td><td>" +
+              e.status +
+              "</td>";
+            tbody.appendChild(tr);
+          }
+        });
+    </script>
+  </body>
+</html>

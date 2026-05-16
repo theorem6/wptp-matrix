@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "program": "Web Platform Translation Program",
+  "paths": [
+    {
+      "id": "openapi-ir-nextjs",
+      "description": "OpenAPI contract to Next.js App Router stubs via neutral IR",
+      "grade": "bronze",
+      "steps": [
+        { "repo": "theorem6/wptp-adapter-openapi", "action": "importOpenApiJson" },
+        { "repo": "theorem6/wptp-ir", "action": "optional normalize (future)" },
+        { "repo": "theorem6/wptp-emit-nextjs", "action": "emitNextJsAppRouter" }
+      ],
+      "matrixEdges": ["openapi-to-wptp-ir", "wptp-ir-to-nextjs-handlers", "openapi-to-nextjs-composed"]
+    },
+    {
+      "id": "php-webir-hono",
+      "description": "Legacy PHP to Hono TypeScript (Chrysalis monolith path)",
+      "grade": "gold",
+      "steps": [
+        { "repo": "theorem6/chrysalis", "action": "ingest + emit-hono + verify" }
+      ],
+      "matrixEdges": ["php-legacy-to-hono-ts"]
+    },
+    {
+      "id": "webir-neutral-ir",
+      "description": "Chrysalis WebIR bundle to WPTP IR v0",
+      "grade": "gold",
+      "steps": [
+        { "repo": "theorem6/chrysalis", "action": "export-webir-bundle" },
+        { "repo": "theorem6/wptp-ir", "action": "importWebIrBundleJson" }
+      ],
+      "matrixEdges": ["webir-bundle-to-wptp-ir"]
+    }
+  ]
+}
