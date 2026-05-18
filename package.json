@@ -1,6 +1,6 @@
 {
   "name": "@wptp/matrix",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "WPTP public compatibility matrix (source x target x verification grade)",
   "type": "module",
   "license": "MIT",
@@ -35,8 +35,8 @@
   "dependencies": {
     "@wptp/ir": "github:theorem6/wptp-ir#v0.1.3",
     "@wptp/adapter-openapi": "github:theorem6/wptp-adapter-openapi#v0.1.1",
-    "@wptp/adapter-browser": "github:theorem6/wptp-adapter-browser#v0.1.0",
-    "@wptp/emit-nextjs": "github:theorem6/wptp-emit-nextjs#v0.1.0",
+    "@wptp/adapter-browser": "github:theorem6/wptp-adapter-browser#v0.1.1",
+    "@wptp/emit-nextjs": "github:theorem6/wptp-emit-nextjs#v0.1.1",
     "@wptp/emit-hono": "github:theorem6/wptp-emit-hono#v0.1.1",
     "@wptp/emit-fastify": "github:theorem6/wptp-emit-fastify#v0.1.0"
   },
