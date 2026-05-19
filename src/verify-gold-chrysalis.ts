@@ -5,6 +5,27 @@ import { join } from "node:path";
 import type { HarnessRunResult } from "./verify-harness.js";
 import { composeOpenApiIrHonoChrysalis } from "./compose-chrysalis-hono.js";
 
+/** Map `chrysalis status --json` correctness to a 0–100 percentage. */
+export function readCorrectnessPercentFromStatusJson(report: unknown): number | undefined {
+  if (!report || typeof report !== "object") return undefined;
+  const r = report as {
+    correctness?: { percentage?: number; aggregate?: number };
+    summary?: { correctnessPct?: number };
+    migration?: { correctness?: number };
+  };
+  if (typeof r.correctness?.percentage === "number") return r.correctness.percentage;
+  if (typeof r.summary?.correctnessPct === "number") return r.summary.correctnessPct;
+  if (typeof r.correctness?.aggregate === "number") {
+    const a = r.correctness.aggregate;
+    return a <= 1 ? a * 100 : a;
+  }
+  if (typeof r.migration?.correctness === "number") {
+    const m = r.migration.correctness;
+    return m <= 1 ? m * 100 : m;
+  }
+  return undefined;
+}
+
 /** Optional local gold smoke when Chrysalis is built (set CHRYSALIS_ROOT). */
 export function runOptionalGoldPhpWebirHono(chrysalisRoot: string | undefined): HarnessRunResult {
   const id = "php-webir-hono";
@@ -47,12 +68,7 @@ export function runOptionalGoldPhpWebirHono(chrysalisRoot: string | undefined): 
 
   let correctness: number | undefined;
   try {
-    const report = JSON.parse(statusRun.stdout) as {
-      correctness?: { percentage?: number };
-      summary?: { correctnessPct?: number };
-    };
-    correctness =
-      report.correctness?.percentage ?? report.summary?.correctnessPct ?? undefined;
+    correctness = readCorrectnessPercentFromStatusJson(JSON.parse(statusRun.stdout));
     checks.push(`tiny-blog correctness=${correctness ?? "unknown"}%`);
   } catch {
     return { id, grade: "gold", ok: false, detail: "chrysalis status JSON parse failed" };
@@ -72,7 +88,7 @@ export function runOptionalGoldPhpWebirHono(chrysalisRoot: string | undefined): 
     }
   }
 
-  const ok = typeof correctness === "number" && correctness >= 100;
+  const ok = typeof correctness === "number" && correctness + 1e-9 >= 100;
   return {
     id,
     grade: "gold",
